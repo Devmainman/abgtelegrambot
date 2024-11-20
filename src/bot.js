@@ -1,9 +1,10 @@
 const TelegramBot = require('node-telegram-bot-api');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const rawBody = require('raw-body'); // Library to parse raw request body
+
 const db = new sqlite3.Database(path.resolve('./database.sqlite'));
 
-// Your code continues here...
 // Create the 'users' table if it doesn't exist
 db.serialize(() => {
     db.run(`
@@ -20,23 +21,52 @@ db.serialize(() => {
         console.log("Users table created successfully!");
       }
     });
-  });
+});
 
-
-// Replace with your bot token from BotFather
 const token = '8048445649:AAHBHkmHnEOlGFdFw-65mwViNl-9yqES6Ho';
-const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(token, { polling: false }); // Disable polling, we'll use webhook
+
+// Define the webhook handler (this will be the entry point for Vercel)
+module.exports = async (req, res) => {
+  try {
+    // Vercel functions pass a different object, make sure you handle it properly
+    const body = await rawBody(req, { length: req.headers['content-length'], encoding: 'utf-8' });
+    const update = JSON.parse(body); // Telegram sends the request body in JSON format
+
+    // Pass the update to Telegraf (TelegramBot library) to handle the update
+    await bot.handleUpdate(update);
+
+    // Send a success response back to Telegram
+    res.status(200).send('OK');
+  } catch (error) {
+    console.error('Error handling webhook:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+
+// Set the webhook URL, but only do this once after deployment
+const webhookUrl = "https://telegram-mini-gz09w59u7-success-projects-1f8bfaa9.vercel.app/"; // Your Vercel URL
+bot.setWebHook(webhookUrl);
+
+
+/* if (process.env.NODE_ENV !== 'production') {
+  bot.setWebHook('https://telegram-mini-gz09w59u7-success-projects-1f8bfaa9.vercel.app/');
+}
+  */
+
+
 
 // Welcome message when users start the bot
 bot.onText(/\/start(?:\?ref=(\d+))?/, async (msg, match) => {
   const chatId = msg.chat.id;
-  const referrerId = match[1]; // Extract the referral ID if provided
+  const referrerId = match[1]; // Extract the referral ID if provided 
 
   // Welcome message
   bot.sendMessage(chatId, `Welcome to the Mini-App Bot!`);
 
   try {
-      // Check if user is already registered
+      // Check if user is already registered 
       const user = await fetchQuery('SELECT * FROM users WHERE telegram_id = ?', [chatId]);
 
       if (!user.length) {

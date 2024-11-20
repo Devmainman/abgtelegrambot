@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "node-telegram-bot-api": "^0.66.0",
+    "raw-body": "^3.0.0",
     "sqlite3": "^5.1.7"
   }
 }
