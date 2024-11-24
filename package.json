@@ -1,7 +1,5 @@
-
-
 {
-  "name": "telegram-bot",
+  "name": "telegram-mini-app",
   "version": "1.0.0",
   "description": "A Telegram bot built with Node.js",
   "main": "bot.js",
@@ -14,7 +12,8 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
-    "node-telegram-bot-api": "^0.61.0" 
+    "node-telegram-bot-api": "^0.61.0",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
