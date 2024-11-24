@@ -1,19 +1,33 @@
+
+
 {
-  "name": "telegram-mini-app",
+  "name": "telegram-bot",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "A Telegram bot built with Node.js",
+  "main": "bot.js",
   "scripts": {
-    "start": "node src/bot.js",
-    "vercel-build": "node src/bot.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "dependencies": {
-    "node-telegram-bot-api": "^0.66.0",
-    "raw-body": "^3.0.0",
-    "sqlite3": "^5.1.7"
-  }
+    "dotenv": "^16.0.3",
+    "node-telegram-bot-api": "^0.61.0" 
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Devmainman/telegram-mini-app.git"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "nodejs"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
 }
